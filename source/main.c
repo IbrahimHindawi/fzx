@@ -1,5 +1,4 @@
 #include <math.h>
-#include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,24 +11,17 @@
 #endif
 #include <SDL2/SDL.h>
 
+#include "core.h"
 #include "vector.h"
-
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64;
-typedef int8_t i8;
-typedef int16_t i16;
-typedef int32_t i32;
-typedef int64_t i64;
-typedef size_t usize;
+#include "fzx/fzx.h"
 
 static SDL_Window *window;
 static SDL_Renderer *renderer;
 static i32 windowWidth;
 static i32 windowHeight;
-static i32 color;
-bool running = true;
+
+static bool running = true;
+static fzxParticle *particle;
 
 // Graphics
 // ---------------------
@@ -76,7 +68,7 @@ void gfxDrawLine(int x0, int y0, int x1, int y1, u32 color) {
 
 void gfxDrawCircle(int x, int y, int radius, float angle, u32 color) {
     circleColor(renderer, x, y, radius, color);
-    lineColor(renderer, x, y, x + cos(angle) * radius, y + sin(angle) * radius, color);
+    lineColor(renderer, x, y, (i16)(x + cos(angle) * radius), (i16)(y + sin(angle) * radius), color);
 }
 
 void gfxDrawFillCircle(int x, int y, int radius, u32 color) {
@@ -84,14 +76,19 @@ void gfxDrawFillCircle(int x, int y, int radius, u32 color) {
 }
 
 void gfxDrawRect(int x, int y, int width, int height, u32 color) {
-    lineColor(renderer, x - width / 2.0, y - height / 2.0, x + width / 2.0, y - height / 2.0, color);
-    lineColor(renderer, x + width / 2.0, y - height / 2.0, x + width / 2.0, y + height / 2.0, color);
-    lineColor(renderer, x + width / 2.0, y + height / 2.0, x - width / 2.0, y + height / 2.0, color);
-    lineColor(renderer, x - width / 2.0, y + height / 2.0, x - width / 2.0, y - height / 2.0, color);
+    lineColor(renderer, (i16)(x - width / 2.0f), (i16)(y - height / 2.0f), (i16)(x + width / 2.0f), (i16)(y - height / 2.0f), color);
+    lineColor(renderer, (i16)(x + width / 2.0f), (i16)(y - height / 2.0f), (i16)(x + width / 2.0f), (i16)(y + height / 2.0f), color);
+    lineColor(renderer, (i16)(x + width / 2.0f), (i16)(y + height / 2.0f), (i16)(x - width / 2.0f), (i16)(y + height / 2.0f), color);
+    lineColor(renderer, (i16)(x - width / 2.0f), (i16)(y + height / 2.0f), (i16)(x - width / 2.0f), (i16)(y - height / 2.0f), color);
 }
 
 void gfxDrawFillRect(int x, int y, int width, int height, u32 color) {
-    boxColor(renderer, x - width / 2.0, y - height / 2.0, x + width / 2.0, y + height / 2.0, color);
+    boxColor(renderer, 
+            (i16)(x - width / 2.0f), 
+            (i16)(y - height / 2.0f), 
+            (i16)(x + width / 2.0f), 
+            (i16)(y + height / 2.0f), 
+            color);
 }
 
 /*
@@ -120,13 +117,20 @@ void DrawFillPolygon(int x, int y, const vec2 *vertices, u32 color) {
 
 void gfxDrawTexture(int x, int y, int width, int height, float rotation, SDL_Texture* texture) {
     SDL_Rect dstRect = {x - (width / 2), y - (height / 2), width, height};
-    float rotationDeg = rotation * 57.2958;
+    float rotationDeg = rotation * 57.2958f;
     SDL_RenderCopyEx(renderer, texture, NULL, &dstRect, rotationDeg, NULL, SDL_FLIP_NONE);
 }
 
 
 // System
 // ---------------------
+void setup() {
+    particle = malloc(sizeof(fzxParticle));
+    *particle = fzxParticleCreate(512.f, 512.f, 32.f);
+    particle->velocity.x = 1.0f;
+    // particle->velocity.y = 1.0f;
+}
+
 void input() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -143,30 +147,31 @@ void input() {
 }
 
 void update() {
-
+    particle->position.x += particle->velocity.x;
+    particle->position.y += particle->velocity.y;
 }
 
 void render() {
-    gfxClearScreen(color);
-    gfxDrawFillCircle(512, 512, 10, 0xFFFFFFFF);
+    gfxClearScreen(0xFF145288);
+    gfxDrawFillCircle(particle->position.x, particle->position.y, 3, 0xFFFFFFFF);
     gfxRenderFrame();
+}
+
+void deinit() {
+    free(particle);
 }
 
 // Entry Point
 // ---------------------
 int main(int argc, char *argv[]) {
-    windowWidth = 800;
-    windowHeight = 640;
-    color = 0xFF111111;
+    setup();
     gfxOpenWindow();
-    vec2 pos = {512, 512};
-
     while(running != false) {
         input();
         update();
         render();
     }
-
+    deinit();
     gfxCloseWindow();
     return 0;
 }
