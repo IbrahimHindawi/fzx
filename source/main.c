@@ -15,6 +15,11 @@
 #include "vector.h"
 #include "fzx/fzx.h"
 
+#define FPS 60
+const int frameTime = 1000 / FPS;
+int framePrevTime;
+int frameDelay;
+
 static SDL_Window *window;
 static SDL_Renderer *renderer;
 static i32 windowWidth;
@@ -128,7 +133,7 @@ void setup() {
     particle = malloc(sizeof(fzxParticle));
     *particle = fzxParticleCreate(512.f, 512.f, 32.f);
     particle->velocity.x = 1.0f;
-    // particle->velocity.y = 1.0f;
+    particle->velocity.y = 0.0f;
 }
 
 void input() {
@@ -147,6 +152,16 @@ void input() {
 }
 
 void update() {
+    frameDelay = frameTime - (SDL_GetTicks() - framePrevTime);
+    if(frameDelay > 0) {
+        SDL_Delay(frameDelay);
+    }
+    float deltaTime = (SDL_GetTicks() - framePrevTime) / 1000.0f;
+    // printf("ticks: %d, ", SDL_GetTicks());
+    framePrevTime = SDL_GetTicks();
+    // printf("prev: %d, delay: %d\n", framePrevTime, frameDelay);
+    particle->velocity.x = 100.0f * deltaTime;
+    particle->velocity.y = 0.0f * deltaTime;
     particle->position.x += particle->velocity.x;
     particle->position.y += particle->velocity.y;
 }

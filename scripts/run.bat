@@ -1,2 +1,2 @@
 @echo off
-build\Debug\cgfx.exe
+build\Debug\fzx.exe
