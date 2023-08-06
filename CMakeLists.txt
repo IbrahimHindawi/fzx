@@ -1,19 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(cgfx VERSION 1.0)
+project(fzx VERSION 1.0)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable(${PROJECT_NAME}
     source/main.c
-    thirdparty/glad/src/glad.c
+    source/vector.c
 )
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
 include_directories(source/)
-include_directories(thirdparty/glad/include)
-include_directories(thirdparty/stb/include)
-include_directories(thirdparty/linmath/include)
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set_target_properties(${PROJECT_NAME} PROPERTIES VS_GLOBAL_VcpkgEnabled true)
@@ -37,6 +34,9 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     target_link_libraries(${PROJECT_NAME} -lm -ldl ${SDL2_LIBRARIES})
 endif()
 
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_directory
-                   ${CMAKE_SOURCE_DIR}/resource ${CMAKE_CURRENT_BINARY_DIR}/resource)
+find_package(sdl2-gfx CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2_gfx)
+
+#   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#                      COMMAND ${CMAKE_COMMAND} -E copy_directory
+#                      ${CMAKE_SOURCE_DIR}/resource ${CMAKE_CURRENT_BINARY_DIR}/resource)

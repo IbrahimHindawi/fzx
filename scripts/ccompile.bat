@@ -1,3 +1,3 @@
 @echo off
 
-msbuild build\cgfx.sln -nologo -ds:False -v:m
+msbuild build\fzx.sln -nologo -ds:False -v:m
