@@ -13,29 +13,34 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 include_directories(source/)
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    # VCPKG
     set_target_properties(${PROJECT_NAME} PROPERTIES VS_GLOBAL_VcpkgEnabled true)
+    # SDL2
     find_package(SDL2 CONFIG REQUIRED)
     target_link_libraries(${PROJECT_NAME}
             PRIVATE
             $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
             $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
     )
+    # target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES})
+    find_package(sdl2-gfx CONFIG REQUIRED)
+    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2_gfx)
 endif()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     find_package(SDL2 CONFIG REQUIRED)
-    include_directories(${SDL2_INCLUDE_DIRS})
-    target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
+    include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_GFX_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARIES})
 endif()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     find_package(SDL2 CONFIG REQUIRED)
-    include_directories(${SDL2_INCLUDE_DIRS})
-    target_link_libraries(${PROJECT_NAME} -lm -ldl ${SDL2_LIBRARIES})
+    include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_GFX_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} -lm -ldl ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARIES})
 endif()
 
-find_package(sdl2-gfx CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2_gfx)
+add_subdirectory(extern/haikal)
+include_directories(extern/haikal/include)
 
 #   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 #                      COMMAND ${CMAKE_COMMAND} -E copy_directory

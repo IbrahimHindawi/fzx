@@ -3,20 +3,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "SDL2/SDL_events.h"
-#include "SDL2/SDL_video.h"
 #include "SDL2/SDL2_gfxPrimitives.h"
-#ifdef _MSC_VER
-    #define SDL_MAIN_HANDLED
-#endif
 #include <SDL2/SDL.h>
 
 #include "core.h"
 #include "vector.h"
 #include "fzx/fzx.h"
 
+#include "hkArray.h"
+
 #define FPS 60
 const int frameTime = 1000 / FPS;
+const float frameTimef32 = 1000.0f / FPS;
 int framePrevTime;
 int frameDelay;
 
@@ -132,8 +130,10 @@ void gfxDrawTexture(int x, int y, int width, int height, float rotation, SDL_Tex
 void setup() {
     particle = malloc(sizeof(fzxParticle));
     *particle = fzxParticleCreate(512.f, 512.f, 32.f);
-    particle->velocity.x = 1.0f;
+    particle->velocity.x = 3.0f;
     particle->velocity.y = 0.0f;
+    particle->acceleration.x = 1.0f;
+    particle->acceleration.y = 0.0f;
 }
 
 void input() {
@@ -157,11 +157,15 @@ void update() {
         SDL_Delay(frameDelay);
     }
     float deltaTime = (SDL_GetTicks() - framePrevTime) / 1000.0f;
+    if (deltaTime > frameTime) {
+        deltaTime = frameTimef32;
+    }
     // printf("ticks: %d, ", SDL_GetTicks());
     framePrevTime = SDL_GetTicks();
     // printf("prev: %d, delay: %d\n", framePrevTime, frameDelay);
-    particle->velocity.x = 100.0f * deltaTime;
-    particle->velocity.y = 0.0f * deltaTime;
+
+    particle->velocity.x += particle->acceleration.x * deltaTime;
+    particle->velocity.y += particle->acceleration.y * deltaTime;
     particle->position.x += particle->velocity.x;
     particle->position.y += particle->velocity.y;
 }
