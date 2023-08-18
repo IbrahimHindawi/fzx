@@ -28,15 +28,27 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 endif()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    find_package(SDL2 CONFIG REQUIRED)
-    include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_GFX_INCLUDE_DIRS})
-    target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARIES})
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+    # Find and link SDL2
+    find_package(SDL2 REQUIRED)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
+    # Find and link SDL2_gfx
+    find_package(SDL2_gfx REQUIRED)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_GFX_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} ${SDL2_GFX_LIBRARIES})
 endif()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    find_package(SDL2 CONFIG REQUIRED)
-    include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_GFX_INCLUDE_DIRS})
-    target_link_libraries(${PROJECT_NAME} -lm -ldl ${SDL2_LIBRARIES} ${SDL2_GFX_LIBRARIES})
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+    # Find and link SDL2
+    find_package(SDL2 REQUIRED)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} -lm -ldl ${SDL2_LIBRARIES})
+    # Find and link SDL2_gfx
+    find_package(SDL2_gfx REQUIRED)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_GFX_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} -lm -ldl ${SDL2_GFX_LIBRARIES})
 endif()
 
 add_subdirectory(extern/haikal)
