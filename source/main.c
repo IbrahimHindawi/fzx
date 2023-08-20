@@ -164,6 +164,10 @@ void update() {
     particle->velocity.y = 0.0f * deltaTime;
     particle->position.x += particle->velocity.x;
     particle->position.y += particle->velocity.y;
+    printf("particle.position.x = %f\n", particle->position.x);
+    if((particle->position.x == 0.0f) || (particle->position.x >= windowWidth)) {
+        particle->velocity.x *= -1.0f;
+    }
 }
 
 void render() {
@@ -181,6 +185,7 @@ void deinit() {
 int main(int argc, char *argv[]) {
     setup();
     gfxOpenWindow();
+    printf("%d", windowWidth);
     while(running != false) {
         input();
         update();
