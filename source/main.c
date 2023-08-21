@@ -130,10 +130,10 @@ void gfxDrawTexture(int x, int y, int width, int height, float rotation, SDL_Tex
 void setup() {
     particle = malloc(sizeof(fzxParticle));
     *particle = fzxParticleCreate(512.f, 512.f, 32.f);
-    particle->velocity.x = 3.0f;
-    particle->velocity.y = 0.0f;
-    particle->acceleration.x = 1.0f;
-    particle->acceleration.y = 0.0f;
+    particle->velocity.x = 0.0f;
+    particle->velocity.y = 3.0f;
+    particle->acceleration.x = 0.0f;
+    particle->acceleration.y = 1.0f;
 }
 
 void input() {
@@ -152,6 +152,7 @@ void input() {
 }
 
 void update() {
+    // delta time
     frameDelay = frameTime - (SDL_GetTicks() - framePrevTime);
     if(frameDelay > 0) {
         SDL_Delay(frameDelay);
@@ -168,9 +169,9 @@ void update() {
     particle->velocity.y += particle->acceleration.y * deltaTime;
     particle->position.x += particle->velocity.x;
     particle->position.y += particle->velocity.y;
-    printf("particle.position.x = %f\n", particle->position.x);
-    if((particle->position.x == 0.0f) || (particle->position.x >= windowWidth)) {
-        particle->velocity.x *= -1.0f;
+
+    if((particle->position.y <= 0.0f) || (particle->position.y >= windowHeight)) {
+        particle->velocity.y *= -1.f;
     }
 }
 
@@ -189,7 +190,6 @@ void deinit() {
 int main(int argc, char *argv[]) {
     setup();
     gfxOpenWindow();
-    printf("%d", windowWidth);
     while(running != false) {
         input();
         update();

@@ -8,10 +8,10 @@ typedef struct {
     f32 mass;
 } fzxParticle;
 
-fzxParticle fzxParticleCreate(f32 x, f32 y, f32 mass) {
+fzxParticle fzxParticleCreate(f32 posX, f32 posY, f32 mass) {
     fzxParticle result = {0};
-    result.position.x = x;
-    result.position.y = y;
+    result.position.x = posX;
+    result.position.y = posY;
     result.velocity.x = 0.f;
     result.velocity.y = 0.f;
     result.acceleration.x = 0.f;
