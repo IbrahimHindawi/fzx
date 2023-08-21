@@ -14,7 +14,7 @@
 
 #define FPS 60
 const int frameTime = 1000 / FPS;
-const float frameTimef32 = 1000.0f / FPS;
+const float frameTimef32 = 1000.f / FPS;
 int framePrevTime;
 int frameDelay;
 
@@ -79,18 +79,18 @@ void gfxDrawFillCircle(int x, int y, int radius, u32 color) {
 }
 
 void gfxDrawRect(int x, int y, int width, int height, u32 color) {
-    lineColor(renderer, (i16)(x - width / 2.0f), (i16)(y - height / 2.0f), (i16)(x + width / 2.0f), (i16)(y - height / 2.0f), color);
-    lineColor(renderer, (i16)(x + width / 2.0f), (i16)(y - height / 2.0f), (i16)(x + width / 2.0f), (i16)(y + height / 2.0f), color);
-    lineColor(renderer, (i16)(x + width / 2.0f), (i16)(y + height / 2.0f), (i16)(x - width / 2.0f), (i16)(y + height / 2.0f), color);
-    lineColor(renderer, (i16)(x - width / 2.0f), (i16)(y + height / 2.0f), (i16)(x - width / 2.0f), (i16)(y - height / 2.0f), color);
+    lineColor(renderer, (i16)(x - width / 2.f), (i16)(y - height / 2.f), (i16)(x + width / 2.f), (i16)(y - height / 2.f), color);
+    lineColor(renderer, (i16)(x + width / 2.f), (i16)(y - height / 2.f), (i16)(x + width / 2.f), (i16)(y + height / 2.f), color);
+    lineColor(renderer, (i16)(x + width / 2.f), (i16)(y + height / 2.f), (i16)(x - width / 2.f), (i16)(y + height / 2.f), color);
+    lineColor(renderer, (i16)(x - width / 2.f), (i16)(y + height / 2.f), (i16)(x - width / 2.f), (i16)(y - height / 2.f), color);
 }
 
 void gfxDrawFillRect(int x, int y, int width, int height, u32 color) {
     boxColor(renderer, 
-            (i16)(x - width / 2.0f), 
-            (i16)(y - height / 2.0f), 
-            (i16)(x + width / 2.0f), 
-            (i16)(y + height / 2.0f), 
+            (i16)(x - width / 2.f), 
+            (i16)(y - height / 2.f), 
+            (i16)(x + width / 2.f), 
+            (i16)(y + height / 2.f), 
             color);
 }
 
@@ -130,10 +130,10 @@ void gfxDrawTexture(int x, int y, int width, int height, float rotation, SDL_Tex
 void setup() {
     particle = malloc(sizeof(fzxParticle));
     *particle = fzxParticleCreate(512.f, 512.f, 32.f);
-    particle->velocity.x = 0.0f;
-    particle->velocity.y = 3.0f;
-    particle->acceleration.x = 0.0f;
-    particle->acceleration.y = 1.0f;
+    particle->velocity.x = 3.f;
+    particle->velocity.y = 3.f;
+    // particle->acceleration.x = 1.f;
+    particle->acceleration.y = 1.f;
 }
 
 void input() {
@@ -157,7 +157,7 @@ void update() {
     if(frameDelay > 0) {
         SDL_Delay(frameDelay);
     }
-    float deltaTime = (SDL_GetTicks() - framePrevTime) / 1000.0f;
+    float deltaTime = (SDL_GetTicks() - framePrevTime) / 1000.f;
     if (deltaTime > frameTime) {
         deltaTime = frameTimef32;
     }
@@ -170,8 +170,11 @@ void update() {
     particle->position.x += particle->velocity.x;
     particle->position.y += particle->velocity.y;
 
-    if((particle->position.y <= 0.0f) || (particle->position.y >= windowHeight)) {
+    if((particle->position.y <= 0.f) || (particle->position.y >= windowHeight)) {
         particle->velocity.y *= -1.f;
+    }
+    if((particle->position.x <= 0.f) || (particle->position.x >= windowWidth)) {
+        particle->velocity.x *= -1.f;
     }
 }
 
