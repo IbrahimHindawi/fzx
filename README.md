@@ -23,3 +23,7 @@ Compiles to Win64 MacOS Linux with `compile_commands.json` for clangd LSP suppor
 
 ### Dependencies:
 * [SDL2](https://www.libsdl.org/)  
+* [SDL2_gfx](https://www.libsdl.org/)  
+
+### TODO:
+* automate build scripts to become project agnostic
