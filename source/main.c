@@ -199,4 +199,3 @@ int main(int argc, char *argv[]) {
     gfxCloseWindow();
     return 0;
 }
-
