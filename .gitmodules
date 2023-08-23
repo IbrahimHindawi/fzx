@@ -1,3 +1,6 @@
 [submodule "extern/haikal"]
 	path = extern/haikal
 	url = https://www.github.com/IbrahimHindawi/haikal
+[submodule "scriptsc"]
+	path = scriptsc
+	url = https://www.github.com/IbrahimHindawi/scriptsc
