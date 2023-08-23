@@ -12,8 +12,9 @@ Compiles to Win64 MacOS Linux with `compile_commands.json` for clangd LSP suppor
 ### Win64 Run:
 * [Install & Integrate VCPKG](https://learn.microsoft.com/en-us/vcpkg/examples/installing-and-using-packages)
 * Install dependencies through VCPKG.
-* `scripts\bbuild.bat` to build `.sln` & `compile_commands.json`. (check DCMAKE_TOOLCHAIN_FILE path)
-* `scripts\ccompilerun.bat` to compile & run exe.
+* Configure CMakeToolchainFIle in `scripts\build.bat`.
+* `scripts\build.bat -b` to build `.sln` & `compile_commands.json`.
+* `scripts\build.bat -cr` to compile & run exe.
 
 ### Win64 Toolchain:
 * [Visual Studio 2022 & MSBuild](https://visualstudio.microsoft.com/downloads/)
