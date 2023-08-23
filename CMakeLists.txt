@@ -1,17 +1,20 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(ProjectNameParam "DefaultProject" CACHE STRING "Command line argument containing the project name.")
-project(${ProjectNameParam} VERSION 1.0)
+project(${ProjectNameParam} VERSION 1.0 LANGUAGES C)
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 add_executable(${PROJECT_NAME}
     source/main.c
     source/vector.c
 )
-
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_STANDARD_REQUIRED True)
-
 include_directories(source/)
+
+add_subdirectory(extern)
+target_link_libraries(${PROJECT_NAME} PUBLIC haikal)
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     # VCPKG
@@ -51,9 +54,6 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_GFX_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME} -lm -ldl ${SDL2_GFX_LIBRARIES})
 endif()
-
-add_subdirectory(extern/haikal)
-include_directories(extern/haikal/include)
 
 #   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 #                      COMMAND ${CMAKE_COMMAND} -E copy_directory
