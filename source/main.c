@@ -18,6 +18,8 @@ const float frameTimef32 = 1000.f / FPS;
 int framePrevTime;
 int frameDelay;
 
+#define PPM 1.f
+
 static SDL_Window *window;
 static SDL_Renderer *renderer;
 static i32 windowWidth;
@@ -130,10 +132,8 @@ void gfxDrawTexture(int x, int y, int width, int height, float rotation, SDL_Tex
 void setup() {
     particle = malloc(sizeof(fzxParticle));
     *particle = fzxParticleCreate(512.f, 512.f, 32.f);
-    particle->velocity.x = 3.f;
-    particle->velocity.y = 3.f;
-    // particle->acceleration.x = 1.f;
-    particle->acceleration.y = 1.f;
+    particle->velocity = vec2_new(3.f, 3.f);
+    particle->acceleration = vec2_new(0.f, 9.8f * PPM);
 }
 
 void input() {
@@ -165,14 +165,18 @@ void update() {
     framePrevTime = SDL_GetTicks();
     // printf("prev: %d, delay: %d\n", framePrevTime, frameDelay);
 
+    // Integration
     particle->velocity = vec2_mul_add_scalar(particle->velocity, particle->acceleration, deltaTime);
     particle->position = vec2_add(particle->position, particle->velocity);
 
+    // TODO(ibrahim): implement collision resolution by offsetting the 
+    // point positions on contact to place the ball on the wall
     if((particle->position.y <= 0.f) || (particle->position.y >= windowHeight)) {
-        particle->velocity.y *= -1.f;
+        particle->velocity.y *= -.9f;
     }
+
     if((particle->position.x <= 0.f) || (particle->position.x >= windowWidth)) {
-        particle->velocity.x *= -1.f;
+        particle->velocity.x *= -.9f;
     }
 }
 
