@@ -12,6 +12,40 @@ vec3 vec3_new(float x, float y, float z) {
     return result;
 }
 
+vec3 vec3_add(vec3 a, vec3 b) {
+    vec3 result = {0};
+    result.x = a.x + b.x;
+    result.y = a.y + b.y;
+    result.z = a.z + b.z;
+    return result;
+}
+
+vec3 vec3_sub(vec3 a, vec3 b) {
+    vec3 result = {0};
+    result.x = a.x - b.x;
+    result.y = a.y - b.y;
+    result.z = a.z - b.z;
+    return result;
+}
+
+vec3 vec3_scalar_multiply(vec3 v, float scalar){
+    vec3 result = {0};
+    v.x *= scalar;
+    v.y *= scalar;
+    v.z *= scalar;
+    result = v;
+    return result;
+}
+
+vec3 vec3_scalar_add(vec3 v, float scalar){
+    vec3 result = {0};
+    v.x += scalar;
+    v.y += scalar;
+    v.z += scalar;
+    result = v;
+    return result;
+}
+
 vec3 vec3_rotate_x(vec3 v, float angle) {
 	vec3 rotated_vector = vec3_new(
 		v.x,
@@ -37,40 +71,6 @@ vec3 vec3_rotate_z(vec3 v, float angle) {
 		v.z
 	);
 	return rotated_vector;
-}
-
-vec3 vec3_scalar_multiply(vec3 v, float scalar){
-    vec3 result = {0};
-    v.x *= scalar;
-    v.y *= scalar;
-    v.z *= scalar;
-    result = v;
-    return result;
-}
-
-vec3 vec3_scalar_add(vec3 v, float scalar){
-    vec3 result = {0};
-    v.x += scalar;
-    v.y += scalar;
-    v.z += scalar;
-    result = v;
-    return result;
-}
-
-vec3 vec3_add(vec3 a, vec3 b) {
-    vec3 result = {0};
-    result.x = a.x + b.x;
-    result.y = a.y + b.y;
-    result.z = a.z + b.z;
-    return result;
-}
-
-vec3 vec3_sub(vec3 a, vec3 b) {
-    vec3 result = {0};
-    result.x = a.x - b.x;
-    result.y = a.y - b.y;
-    result.z = a.z - b.z;
-    return result;
 }
 
 float vec3_dot(vec3 a, vec3 b) {
@@ -131,6 +131,36 @@ vec3 vec3_normalize(vec3 a) {
 
 vec2 vec2_new(float x, float y) {
     vec2 result = {x, y};
+    return result;
+}
+
+vec2 vec2_add(vec2 a, vec2 b) {
+    vec2 result = {0};
+    result.x = a.x + b.x;
+    result.y = a.y + b.y;
+    return result;
+}
+
+vec2 vec2_sub(vec2 a, vec2 b) {
+    vec2 result = {0};
+    result.x = a.x - b.x;
+    result.y = a.y - b.y;
+    return result;
+}
+
+vec2 vec2_scalar_add(vec2 v, float scalar) {
+    vec2 result = {0};
+    v.x *= scalar;
+    v.y *= scalar;
+    result = v;
+    return result;
+}
+
+vec2 vec2_scalar_multiply(vec2 v, float scalar) {
+    vec2 result = {0};
+    v.x *= scalar;
+    v.y *= scalar;
+    result = v;
     return result;
 }
 

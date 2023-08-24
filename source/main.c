@@ -165,10 +165,12 @@ void update() {
     framePrevTime = SDL_GetTicks();
     // printf("prev: %d, delay: %d\n", framePrevTime, frameDelay);
 
-    particle->velocity.x += particle->acceleration.x * deltaTime;
-    particle->velocity.y += particle->acceleration.y * deltaTime;
-    particle->position.x += particle->velocity.x;
-    particle->position.y += particle->velocity.y;
+    // particle->velocity.x += particle->acceleration.x * deltaTime;
+    // particle->velocity.y += particle->acceleration.y * deltaTime;
+    particle->acceleration = vec2_scalar_multiply(particle->acceleration, deltaTime);
+    // particle->position.x += particle->velocity.x;
+    // particle->position.y += particle->velocity.y;
+    particle->velocity = vec2_add(particle->velocity, particle->acceleration);
 
     if((particle->position.y <= 0.f) || (particle->position.y >= windowHeight)) {
         particle->velocity.y *= -1.f;
