@@ -28,7 +28,7 @@ vec3 vec3_sub(vec3 a, vec3 b) {
     return result;
 }
 
-vec3 vec3_scalar_multiply(vec3 v, float scalar){
+vec3 vec3_scalar_mul(vec3 v, float scalar){
     vec3 result = {0};
     v.x *= scalar;
     v.y *= scalar;
@@ -156,11 +156,26 @@ vec2 vec2_scalar_add(vec2 v, float scalar) {
     return result;
 }
 
-vec2 vec2_scalar_multiply(vec2 v, float scalar) {
+vec2 vec2_scalar_mul(vec2 v, float scalar) {
     vec2 result = {0};
     v.x *= scalar;
     v.y *= scalar;
     result = v;
+    return result;
+}
+
+vec2 vec2_scalar_mul_add(vec2 a, vec2 b, vec3 s) {
+    vec2 result = {0};
+    result.x = a.x + b.x * s.x;
+    result.y = a.y + b.y * s.y;
+    return result;
+
+}
+
+vec2 vec2_scalar_mul_add_scalar(vec2 a, vec2 b, float s) {
+    vec2 result = {0};
+    result.x = a.x + b.x * s;
+    result.y = a.y + b.y * s;
     return result;
 }
 
