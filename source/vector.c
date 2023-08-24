@@ -164,7 +164,7 @@ vec2 vec2_scalar_mul(vec2 v, float scalar) {
     return result;
 }
 
-vec2 vec2_scalar_mul_add(vec2 a, vec2 b, vec3 s) {
+vec2 vec2_mul_add(vec2 a, vec2 b, vec3 s) {
     vec2 result = {0};
     result.x = a.x + b.x * s.x;
     result.y = a.y + b.y * s.y;
@@ -172,7 +172,7 @@ vec2 vec2_scalar_mul_add(vec2 a, vec2 b, vec3 s) {
 
 }
 
-vec2 vec2_scalar_mul_add_scalar(vec2 a, vec2 b, float s) {
+vec2 vec2_mul_add_scalar(vec2 a, vec2 b, float s) {
     vec2 result = {0};
     result.x = a.x + b.x * s;
     result.y = a.y + b.y * s;

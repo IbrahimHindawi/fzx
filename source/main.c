@@ -165,7 +165,7 @@ void update() {
     framePrevTime = SDL_GetTicks();
     // printf("prev: %d, delay: %d\n", framePrevTime, frameDelay);
 
-    particle->velocity = vec2_scalar_mul_add_scalar(particle->velocity, particle->acceleration, deltaTime);
+    particle->velocity = vec2_mul_add_scalar(particle->velocity, particle->acceleration, deltaTime);
     particle->position = vec2_add(particle->position, particle->velocity);
 
     if((particle->position.y <= 0.f) || (particle->position.y >= windowHeight)) {
