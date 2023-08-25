@@ -133,7 +133,7 @@ void gfxDrawTexture(int x, int y, int width, int height, float rotation, SDL_Tex
 void setup() {
     particle = malloc(sizeof(fzxParticle));
     *particle = fzxParticleCreate(512.f, 512.f, 1.f);
-    particle->velocity = vec2_new(3.f, 3.f);
+    particle->velocity = vec2_new(0.f, 0.f);
     particle->acceleration = vec2_new(0.f, 9.8f * PPM);
 }
 
@@ -147,6 +147,8 @@ void input() {
             case SDL_KEYDOWN:
                 if (event.key.keysym.sym == SDLK_ESCAPE)
                     running = false;
+                if (event.key.keysym.sym == SDLK_SPACE)
+                    particle->velocity = vec2_new(0.f, -10.f);
                 break;
         }
     }
@@ -179,11 +181,12 @@ void update() {
         particle->velocity.x *= -.9f;
     }
     if(particle->position.y - fzxParticleRadius <= 0.f) {
-        particle->position.y = 0.f;
+        particle->position.y = fzxParticleRadius;
         particle->velocity.y *= -.9f;
     } else if (particle->position.y + fzxParticleRadius >= windowHeight) {
         particle->position.y = windowHeight - fzxParticleRadius;
         particle->velocity.y *= -.9f;
+        // particle->velocity.y *= .0f;
     }
 }
 
