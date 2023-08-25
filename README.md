@@ -9,7 +9,8 @@ Compiles to Win64 MacOS Linux with `compile_commands.json` for clangd LSP suppor
 * `make`
 * `./cgfx`
 
-### Win64 Run:
+### Win64 Run:  
+* open `x64 Native Tools Command Prompt for VS 2019`  
 * [Install & Integrate VCPKG](https://learn.microsoft.com/en-us/vcpkg/examples/installing-and-using-packages)
 * Install dependencies through VCPKG.
 * Configure CMakeToolchainFIle in `scripts\build.bat`.
