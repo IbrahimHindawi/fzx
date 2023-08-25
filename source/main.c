@@ -19,6 +19,7 @@ int framePrevTime;
 int frameDelay;
 
 #define PPM 1.f
+#define fzxParticleRadius 24.f
 
 static SDL_Window *window;
 static SDL_Renderer *renderer;
@@ -131,7 +132,7 @@ void gfxDrawTexture(int x, int y, int width, int height, float rotation, SDL_Tex
 // ---------------------
 void setup() {
     particle = malloc(sizeof(fzxParticle));
-    *particle = fzxParticleCreate(512.f, 512.f, 32.f);
+    *particle = fzxParticleCreate(512.f, 512.f, 1.f);
     particle->velocity = vec2_new(3.f, 3.f);
     particle->acceleration = vec2_new(0.f, 9.8f * PPM);
 }
@@ -169,20 +170,26 @@ void update() {
     particle->velocity = vec2_mul_add_scalar(particle->velocity, particle->acceleration, deltaTime);
     particle->position = vec2_add(particle->position, particle->velocity);
 
-    // TODO(ibrahim): implement collision resolution by offsetting the 
-    // point positions on contact to place the ball on the wall
-    if((particle->position.y <= 0.f) || (particle->position.y >= windowHeight)) {
-        particle->velocity.y *= -.9f;
-    }
-
-    if((particle->position.x <= 0.f) || (particle->position.x >= windowWidth)) {
+    // Collision
+    if(particle->position.x - fzxParticleRadius <= 0.f) {
+        particle->position.x = fzxParticleRadius;
         particle->velocity.x *= -.9f;
+    } else if (particle->position.x + fzxParticleRadius >= windowWidth) {
+        particle->position.x = windowWidth - fzxParticleRadius;
+        particle->velocity.x *= -.9f;
+    }
+    if(particle->position.y - fzxParticleRadius <= 0.f) {
+        particle->position.y = 0.f;
+        particle->velocity.y *= -.9f;
+    } else if (particle->position.y + fzxParticleRadius >= windowHeight) {
+        particle->position.y = windowHeight - fzxParticleRadius;
+        particle->velocity.y *= -.9f;
     }
 }
 
 void render() {
     gfxClearScreen(0xFF145288);
-    gfxDrawFillCircle(particle->position.x, particle->position.y, 3, 0xFFFFFFFF);
+    gfxDrawFillCircle(particle->position.x, particle->position.y, fzxParticleRadius, 0xFFFFFFFF);
     gfxRenderFrame();
 }
 
