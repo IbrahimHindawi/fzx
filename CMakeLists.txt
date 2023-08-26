@@ -32,7 +32,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 endif()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/scripts/cmake/")
     # Find and link SDL2
     find_package(SDL2 REQUIRED)
     target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
@@ -44,7 +44,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 endif()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/scripts/cmake/")
     # Find and link SDL2
     find_package(SDL2 REQUIRED)
     target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
